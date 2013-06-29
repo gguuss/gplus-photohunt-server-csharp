@@ -65,7 +65,7 @@ namespace PhotoHunt.utils
         /// If 2, then ask Google for the user's public profile information to store.
         /// </summary>
         /// <param name="tokenGoogleUserId">Google user ID to update.</param>
-        /// <param name="credential">Credential to set for the user.</param>
+        /// <param name="authState">The OAuth v2 state for authorizing the user.</param>
         /// <returns>A User object that represents the created user.</returns>
         public User SaveTokenForUser(String tokenGoogleUserId, IAuthorizationState authState)
         {

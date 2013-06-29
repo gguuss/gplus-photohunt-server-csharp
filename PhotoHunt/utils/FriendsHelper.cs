@@ -57,7 +57,7 @@ namespace PhotoHunt.utils
         /// and others who already exist in the database.
         /// </summary>
         /// <param name="user">The user object to create friend edges for.</param>
-        /// <param name="authState">The authorization state including tokens.</param>
+        /// <param name="ps">The Google+ API client service.</param>
         /// <returns>None.</returns>
         public void GenerateFriends(User user, PlusService ps)
         {
