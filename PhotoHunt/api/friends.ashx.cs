@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Web;
 
@@ -76,7 +76,7 @@ namespace PhotoHunt.api
                 return;
             }
 
-            List<JsonUser> friends = FriendsHelper.GetFriends(user);
+            ArrayList friends = FriendsHelper.GetFriends(user);
 
             context.Response.Write(JsonConvert.SerializeObject(friends));
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Linq;
 
@@ -146,9 +146,9 @@ namespace PhotoHunt.api
                         DateTime.UtcNow.AddSeconds(td.expires_in));
                 }
 
-                String userId = connectHelper.VerifyToken(_authState);
+                PhotoHunt.utils.ConnectHelper.VerifyToken(_authState);
 
-                user = connectHelper.SaveTokenForUser(userId, _authState);
+                user = connectHelper.SaveTokenForUser(_authState);
                 context.Session[Properties.Resources.CURRENT_USER_SESSION_KEY] = user.ToJson();
             }
 
@@ -177,12 +177,12 @@ namespace PhotoHunt.api
     /// PhotoHunt clients.
     /// </summary>
     public class TokenData: Jsonifiable<TokenData> {
-        public String access_token;
-        public String refresh_token;
-        public String code;
-        public String id_token;
-        public long issued_at;
-        public long expires_in;
+        public String access_token { get; set; }
+        public String refresh_token { get; set; }
+        public String code { get; set; }
+        public String id_token { get; set; }
+        public long issued_at { get; set; }
+        public long expires_in { get; set; }
     }
 
 }

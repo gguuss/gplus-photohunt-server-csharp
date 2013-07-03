@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -20,8 +19,14 @@ namespace PhotoHunt
                 VotesHelper voteObject = new VotesHelper();
                 voteObject.DoVote(Context, photoId);
             }
-            catch (Exception) { }
-
+            catch (NullReferenceException nre) {
+                System.Diagnostics.Debug.WriteLine("An error occurred: There was a request for a " +
+                    "photo that is not in the datastore." + nre.StackTrace);
+            }
+            catch (ArgumentNullException ane) {
+                System.Diagnostics.Debug.WriteLine("An error occurred: There was a request for a " +
+                    "photo that is not in the datastore." + ane.StackTrace);
+            }
         }
     }
 }

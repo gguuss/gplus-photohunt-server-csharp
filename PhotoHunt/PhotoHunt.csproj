@@ -127,7 +127,6 @@
     <Content Include="index.html" />
     <Content Include="invite.aspx" />
     <Content Include="admin\showDb.aspx" />
-    <Content Include="jquery.filedrop.js" />
     <Content Include="js\app.js" />
     <Content Include="js\controllers.js" />
     <Content Include="js\directives.js" />

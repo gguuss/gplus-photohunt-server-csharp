@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Web;
 
@@ -125,9 +125,9 @@ namespace PhotoHunt.api
         /// <summary>
         /// A simple class for the JSON data passed as PUT data.
         /// </summary>
-        public class PhotoRequest : Jsonifiable<PhotoRequest>
+        protected class PhotoRequest : Jsonifiable<PhotoRequest>
         {
-            public int photoId;
+            public int photoId { get; set; }
         }
     }
 }

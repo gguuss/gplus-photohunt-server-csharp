@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Web;
 
@@ -70,7 +70,7 @@ namespace PhotoHunt.model
         /// </summary>
         /// <param name="date">The DateTime object to be converted.</param>
         /// <returns>A double representing the time as milliseconds.</returns>
-        public static double ConvertToUnixTimestamp(DateTime date)
+        public double ConvertToUnixTimestamp(DateTime date)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             TimeSpan diff = date.ToUniversalTime() - origin;
@@ -89,7 +89,7 @@ namespace PhotoHunt.model
         /// </summary>
         /// <param name="collection">The list of resources to be returned in JSON as items.</param>
         /// <param name="type">The type of resource to be returned in JSON as kind.</param>
-        public Itemifiable(List<T> collection, string type)
+        public Itemifiable(ArrayList collection, string type)
         {
             items = collection;
             kind = type;
@@ -98,11 +98,11 @@ namespace PhotoHunt.model
         /// <summary>
         /// A list of Jsonifiable objects that represent this resource collection.
         /// </summary>
-        public List<T> items { get; set; }
+        public ArrayList items { get; private set; }
 
-        /// <summary>
+        /// <summary>   
         /// The type of collection, for example "photohunt#themes".
         /// </summary>
-        public string kind;
+        public string kind { get; set; }
     }
 }

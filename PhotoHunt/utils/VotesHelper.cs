@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -150,7 +149,7 @@ namespace PhotoHunt.utils
                     MomentsResource.Collection.Vault);
             try
             {
-                Moment m = insert.Fetch();
+                insert.Fetch();
             }
             catch (GoogleApiRequestException gare)
             {

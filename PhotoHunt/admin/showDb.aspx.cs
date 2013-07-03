@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -38,11 +38,11 @@ namespace PhotoHunt
         public bool showEdges = false;
         public User user;
         public Theme latestTheme = new Theme();
-        public List<Theme> themes = new List<Theme>();
-        public List<Photo> photos = new List<Photo>();
-        public List<User> usersList = new List<User>();
+        public ArrayList themes = new ArrayList();
+        public ArrayList photos = new ArrayList();
+        public ArrayList usersList = new ArrayList();
         public int userCount = 0;
-        public List<DirectedUserToEdge> edges = new List<DirectedUserToEdge>();
+        public ArrayList edges = new ArrayList();
 
         /// <summary>
         /// This is the code behind for the database inspector.
@@ -50,14 +50,13 @@ namespace PhotoHunt
         /// </summary>
         protected void Page_Load(object sender, EventArgs e)
         {
-            User user = null;
             try
             {
                 user = new User((JObject)JsonConvert.DeserializeObject(
                     Session[Properties.Resources.CURRENT_USER_SESSION_KEY].ToString())
                 );
             }
-            catch (Exception nre)
+            catch (NullReferenceException nre)
             {
                 // This is fine because the interface could be accessed by someone not logged in.
                 // If you wanted to add the notion of an administrator, you could add it to the

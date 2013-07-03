@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -15,7 +14,7 @@ namespace PhotoHunt.utils
     /// This class encapsulates utility functions for themes. These perform basic operations
     /// such as listing today's theme.
     /// </summary>
-    public class ThemesHelper
+    static public class ThemesHelper
     {
         /// <summary>
         /// Retrieves a theme given the parameter string for the theme.

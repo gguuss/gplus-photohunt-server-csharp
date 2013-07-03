@@ -15,7 +15,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -116,10 +115,10 @@ namespace PhotoHunt.utils
     /// </summary>
     public class OAuthResponseObject
     {
-        public string access_token;
-        public string refresh_token;
-        public string code;
-        public int expires_in;
-        public string id_token;
+        public string access_token { get; set; }
+        public string refresh_token { get; set; }
+        public string code { get; set; }
+        public int expires_in { get; set; }
+        public string id_token { get; set; }
     }
 }

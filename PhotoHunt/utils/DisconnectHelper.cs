@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
@@ -19,7 +18,7 @@ namespace PhotoHunt.utils
     /// disconnect from the app such as removing friend edges, removing photos
     /// and votes, and sending the token revocation request to Google.
     /// </summary>
-    public class DisconnectHelper
+    static public class DisconnectHelper
     {
         /// <summary>
         /// Remove all of the friend edges associated with a PhotoHunt user.

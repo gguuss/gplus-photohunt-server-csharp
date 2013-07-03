@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -50,7 +50,7 @@ namespace PhotoHunt.utils
         /// <param name="themeDisplayName">The display name for the theme that the photo will be
         /// added to.</param>
         /// <returns>The Photo object representing the uploaded photo.</returns>
-        public Photo UploadPhoto(HttpContext context, User user, Theme selectedTheme)
+        static public Photo UploadPhoto(HttpContext context, User user, Theme selectedTheme)
         {
             // User will be NULL if there isn't someone signed in.
             if (user == null)
@@ -87,7 +87,7 @@ namespace PhotoHunt.utils
             dbPhoto.themeDisplayName = selectedTheme.displayName;
             dbPhoto.numVotes = 0;
             dbPhoto.voted = false;
-            dbPhoto.created = (long)Jsonifiable<Object>.ConvertToUnixTimestamp(DateTime.Now);
+            dbPhoto.created = (long) dbPhoto.ConvertToUnixTimestamp(DateTime.Now);
             dbPhoto.fullsizeUrl = BASE_URL + urlpath;
             dbPhoto.thumbnailUrl = thumbPath;
 
@@ -121,7 +121,7 @@ namespace PhotoHunt.utils
         /// <param name="themeDisplayName">The theme's name.</param>
         /// <param name="upload">The file uploaded.</param>
         /// <returns></returns>
-        public string ResizePhoto(string path, string urlpath, User user, string themeDisplayName,
+        static public string ResizePhoto(string path, string urlpath, User user, string themeDisplayName,
                 HttpPostedFile upload)
         {
             Image image = new Bitmap(path);
@@ -160,7 +160,7 @@ namespace PhotoHunt.utils
         /// <param name="context">The context containing the request, response, and so on.</param>
         /// <param name="user">The PhotoHunt user deleting the photo.</param>
         /// <param name="photo">The Photo object to be deleted.</param>
-        public void DeletePhoto(HttpContext context, User user, Photo toDelete)
+        static public void DeletePhoto(HttpContext context, User user, Photo toDelete)
         {
             // User will be NULL if there isn't someone signed in.
             if (user == null || user.id != toDelete.ownerUserId)
@@ -210,7 +210,7 @@ namespace PhotoHunt.utils
                 new MomentsResource.InsertRequest(ps, body, "me", MomentsResource.Collection.Vault);
             try
             {
-                Moment m = insert.Fetch();
+                insert.Fetch();
             }
             catch (GoogleApiRequestException gare)
             {
@@ -230,11 +230,11 @@ namespace PhotoHunt.utils
         /// photos.</param>
         /// <param name="selectedTheme">The selected PhotoHunt theme.</param>
         /// <returns>A list of objects that can be returned as JSON.</returns>
-        public List<Photo> GetPhotos(bool hasThemeIdParam, bool hasUserIdParam,
+        static public ArrayList GetPhotos(bool hasThemeIdParam, bool hasUserIdParam,
                 bool isFriends, int userId, Theme selectedTheme)
         {
             // This will store JSONified representations of photo objects.
-            List<Photo> photos = new List<Photo>();
+            ArrayList photos = new ArrayList();
 
             if (hasThemeIdParam && hasUserIdParam)
             {

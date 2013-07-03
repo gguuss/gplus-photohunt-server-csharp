@@ -12,7 +12,7 @@
  * the License.
  */
 using System;
-using System.Collections.Generic;
+
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
@@ -23,7 +23,7 @@ namespace PhotoHunt
 {
     public class Global : System.Web.HttpApplication
     {
-        private void Application_Start(object sender, EventArgs e)
+        public void Application_Start(object sender, EventArgs e)
         {
             RegisterRoutes(RouteTable.Routes);
         }
@@ -58,7 +58,7 @@ namespace PhotoHunt
         /// Routes all of the apis to restful endpoints, forwards HTML requests to ASPs, and
         /// reroutes all other requests to the AngularJS front-end.
         /// </summary>
-        private void RegisterRoutes(RouteCollection routes)
+        static protected void RegisterRoutes(RouteCollection routes)
         {
             // API routes
             routes.Add("api/connect", new Route("api/connect", new api.connect()) );

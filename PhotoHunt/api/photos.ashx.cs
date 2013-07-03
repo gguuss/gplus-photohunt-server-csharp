@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -100,7 +100,8 @@ namespace PhotoHunt.api
             // Handle file upload.
             if (context.Request.Files["image"] != null)
             {
-                Photo dbPhoto = photosUtility.UploadPhoto(context, user, selectedTheme);
+                Photo dbPhoto = PhotoHunt.utils.PhotosHelper.UploadPhoto(context, user, 
+                    selectedTheme);
 
                 // Now that the photo has been uploaded to the application, write an app activity to
                 // Google for the photo upload using the Google+ API.
@@ -121,7 +122,7 @@ namespace PhotoHunt.api
                 // Remove the photo if this is a DELETE request.
                 if (context.Request.RequestType.Equals("DELETE"))
                 {
-                    photosUtility.DeletePhoto(context, user, selectedPhoto);
+                    PhotoHunt.utils.PhotosHelper.DeletePhoto(context, user, selectedPhoto);
                 }
 
                 SendResponse(context, selectedPhoto);
@@ -130,8 +131,8 @@ namespace PhotoHunt.api
 
 
             // Return a list of photos based on the current request.
-            SendResponse(context, photosUtility.GetPhotos(hasThemeIdParam, hasUserIdParam,
-                    isFriends, userId, selectedTheme));
+            SendResponse(context, PhotoHunt.utils.PhotosHelper.GetPhotos(hasThemeIdParam, 
+                hasUserIdParam, isFriends, userId, selectedTheme));
             return;
         }
 

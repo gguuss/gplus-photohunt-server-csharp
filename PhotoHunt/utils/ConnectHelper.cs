@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -33,7 +32,7 @@ namespace PhotoHunt.utils
         /// </summary>
         /// <param name="authState">The credential to verify.</param>
         /// <returns>The user ID that is associated with this token.</returns>
-        public String VerifyToken(IAuthorizationState authState)
+        static public String VerifyToken(IAuthorizationState authState)
         {
             // Use Tokeninfo to validate the user and the client.
             var tokeninfo_request = new Oauth2Service().Tokeninfo();
@@ -64,16 +63,14 @@ namespace PhotoHunt.utils
         ///
         /// If 2, then ask Google for the user's public profile information to store.
         /// </summary>
-        /// <param name="tokenGoogleUserId">Google user ID to update.</param>
         /// <param name="authState">The OAuth v2 state for authorizing the user.</param>
         /// <returns>A User object that represents the created user.</returns>
-        public User SaveTokenForUser(String tokenGoogleUserId, IAuthorizationState authState)
+        public User SaveTokenForUser(IAuthorizationState authState)
         {
             // Set the auth state in a the superclass for the authorization call.
             _authState = authState;
 
-            AuthorizationServerDescription description = GoogleAuthenticationServer.Description;
-            var provider = new WebServerClient(description);
+            var provider = new WebServerClient(GoogleAuthenticationServer.Description);
             provider.ClientIdentifier = CLIENT_ID;
             provider.ClientSecret = CLIENT_SECRET;
             var authenticator =
@@ -119,8 +116,7 @@ namespace PhotoHunt.utils
 
                 // Use the FriendsHelper to generate this user's list of friends
                 // who also use this app.
-                FriendsHelper friendsHelper = new FriendsHelper();
-                friendsHelper.GenerateFriends(user, ps);
+                PhotoHunt.utils.FriendsHelper.GenerateFriends(user, ps);
             }
             else
             {

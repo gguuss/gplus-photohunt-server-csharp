@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -132,7 +132,7 @@ namespace PhotoHunt.api
         /// </summary>
         /// <param name="context">Contains the request and response used to send the object.</param>
         /// <param name="body">The objects used to generate a response.</param>
-        protected void SendResponse(HttpContext context, List<T> responseObjects)
+        protected void SendResponse(HttpContext context, ArrayList responseObjects)
         {
             SaveToMobileSession();
 

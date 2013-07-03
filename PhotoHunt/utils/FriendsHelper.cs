@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Web;
 
@@ -29,14 +29,14 @@ namespace PhotoHunt.utils
         /// </summary>
         /// <param name="user">The user whose friend's are retrieved.</param>
         /// <returns>A list of the JsonUsers representing the selected user's friends.</returns>
-        static public List<JsonUser> GetFriends(User user)
+        static public ArrayList GetFriends(User user)
         {
             // Find the edges, convert them into JsonUsers, and return as JSON.
             PhotoHunt.model.PhotohuntContext db = new PhotoHunt.model.PhotohuntContext();
             var edgeQuery = from b in db.Edges
                             where b.photohuntUserId.Equals(user.id)
                             select b;
-            List<JsonUser> people = new List<JsonUser>();
+            ArrayList people = new ArrayList();
             foreach (var edge in edgeQuery)
             {
                 PhotoHunt.model.PhotohuntContext dbInner = new PhotoHunt.model.PhotohuntContext();
@@ -59,14 +59,13 @@ namespace PhotoHunt.utils
         /// <param name="user">The user object to create friend edges for.</param>
         /// <param name="ps">The Google+ API client service.</param>
         /// <returns>None.</returns>
-        public void GenerateFriends(User user, PlusService ps)
+        static public void GenerateFriends(User user, PlusService ps)
         {
             // Get the PeopleFeed for the currently authenticated user using the Google+ API.
             PeopleResource.ListRequest lr = ps.People.List("me",
                     PeopleResource.CollectionEnum.Visible);
 
             PeopleFeed pf = lr.Fetch();
-            List<DirectedUserToEdge> friends = new List<DirectedUserToEdge>();
             PhotohuntContext db = new PhotohuntContext();
 
             do

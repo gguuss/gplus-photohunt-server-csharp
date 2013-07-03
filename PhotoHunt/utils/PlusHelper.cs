@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 // Libraries for Google APIs
@@ -30,25 +30,25 @@ namespace PhotoHunt.utils
     {
 
         // Requires the trailing "/"
-        public static string BASE_URL = "http://localhost:8080/";
+        public const string BASE_URL = "http://localhost:8080/";
 
         // Get this from https://code.google.com/apis/console
-        public static string CLIENT_ID = "YOUR_CLIENT_ID";
-        public static string CLIENT_SECRET = "YOUR_CLIENT_SECRET";
+        public const string CLIENT_ID = "YOUR_CLIENT_ID";
+        public const string CLIENT_SECRET = "YOUR_CLIENT_SECRET";
 
         // Constants for schema types.
-        public static string SCHEMA_REVIEW_TYPE = "http://schema.org/Review";
+        public const string SCHEMA_REVIEW_TYPE = "http://schema.org/Review";
 
         // Constants for app activity types.
-        public static string REVIEW_ACTIVITY_TYPE = "http://schemas.google.com/ReviewActivity";
-        public static string ADD_ACTIVITY_TYPE = "http://schemas.google.com/AddActivity";
+        public const string REVIEW_ACTIVITY_TYPE = "http://schemas.google.com/ReviewActivity";
+        public const string ADD_ACTIVITY_TYPE = "http://schemas.google.com/AddActivity";
 
 
         // Used internally by the OAuth client
-        protected IAuthorizationState _authState;
+        protected IAuthorizationState _authState { get; set; }
 
         // Used to perform API calls against Google+.
-        protected PlusService ps = null;
+        protected PlusService ps { get; set; }
 
         /// <summary>
         /// Generates the credentials needed for the library given the current user stored in
@@ -56,7 +56,7 @@ namespace PhotoHunt.utils
         /// </summary>
         /// <param name="context">The current handler's context.</param>
         /// <returns></returns>
-        protected IAuthorizationState GetCredentialFromLoggedInUser(
+        static protected IAuthorizationState GetCredentialFromLoggedInUser(
                 HttpContext context)
         {
             User user = (User)context.Session[Properties.Resources.CURRENT_USER_SESSION_KEY];
@@ -160,38 +160,75 @@ namespace PhotoHunt.utils
         /// <summary>
         /// Thrown when the current user is not authorized.
         /// </summary>
-        public class UserNotAuthorizedException : Exception { }
+        [Serializable()]
+        public class UserNotAuthorizedException : Exception 
+        { 
+            public UserNotAuthorizedException() : base() { }
+            public UserNotAuthorizedException(String message) : base(message) { }
+            public UserNotAuthorizedException(String message, Exception innerException):
+                base(message, innerException) { }
+            protected UserNotAuthorizedException(SerializationInfo info, 
+                StreamingContext context) : base(info, context) { }
+        }
 
         /// <summary>
         /// Thrown if the current user's access token is expired and the user has
         /// no refresh token stored.
         /// </summary>
-        public class GoogleTokenExpirationException : Exception { }
+        [Serializable()]
+        public class GoogleTokenExpirationException : Exception 
+        { 
+            public GoogleTokenExpirationException() : base() { }
+            public GoogleTokenExpirationException(String message) : base(message) { }
+            public GoogleTokenExpirationException(String message, Exception innerException):
+                base(message, innerException) { }
+            protected GoogleTokenExpirationException(SerializationInfo info, 
+                StreamingContext context) : base(info, context) { }
+        }
 
 
         /// <summary>
         /// An exception from the Google API.
         /// </summary>
+        [Serializable()]
         public class GoogleApiException : Exception
         {
+            public GoogleApiException() : base() { }
             public GoogleApiException(String message) : base(message) { }
+            public GoogleApiException(String message, Exception innerException):
+                base(message, innerException) { }
+            protected GoogleApiException(SerializationInfo info, 
+                StreamingContext context) : base(info, context) { }
+      
         }
 
         /// <summary>
         /// An exception related to TokenData that is unrelated to verification.
         /// </summary>
+        [Serializable()]
         public class TokenDataException : Exception
         {
+            public TokenDataException() : base() { }
             public TokenDataException(String message) : base(message) { }
+            public TokenDataException(String message, Exception innerException):
+                base(message, innerException) { }
+            protected TokenDataException(SerializationInfo info, 
+                StreamingContext context) : base(info, context) { }
         }
 
         /// <summary>
         /// Exceptions where verification from the ID token fails such as
         /// client ID not matching this projects client ID.
         /// </summary>
+        [Serializable()]
         public class TokenVerificationException : Exception
         {
+            public TokenVerificationException() : base() { }
             public TokenVerificationException(String message) : base(message) { }
+            public TokenVerificationException(String message, Exception innerException):
+                base(message, innerException) { }
+            protected TokenVerificationException(SerializationInfo info, 
+                StreamingContext context) : base(info, context) { }
         }
     }
 }

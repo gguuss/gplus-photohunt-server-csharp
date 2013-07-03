@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Web;
 
@@ -64,7 +64,7 @@ namespace PhotoHunt.api
         public override void ProcessRequest(HttpContext context)
         {
             Theme currentTheme = null;
-            List<JsonTheme> themes = new List<JsonTheme>();
+            ArrayList themes = new ArrayList();
 
             DateTime today = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             DateTime tomorrow = today.AddDays(1);
