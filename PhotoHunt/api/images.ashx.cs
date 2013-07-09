@@ -79,7 +79,7 @@ namespace PhotoHunt.api
                 // The returned URL is /photos
                 context.Response.ContentType = "application/json";
                 string redir = BASE_URL + "api/photos";
-                context.Response.Write(redir);
+                context.Response.Write("{\"url\" : \"" + redir +"\"}");
                 return;
             }
         }
