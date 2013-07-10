@@ -54,7 +54,7 @@ namespace PhotoHunt.api
     ///
     /// @author class@google.com (Gus Class)
     /// </summary>
-    public class images : jsonrest<images>
+    public class images : jsonrest<UploadUrl>
     {
         /// <summary>
         /// The route handler for the request, maps images to photos to simulate
@@ -79,7 +79,9 @@ namespace PhotoHunt.api
                 // The returned URL is /photos
                 context.Response.ContentType = "application/json";
                 string redir = BASE_URL + "api/photos";
-                context.Response.Write("{\"url\" : \"" + redir +"\"}");
+                UploadUrl responseObject = new UploadUrl();
+                responseObject.url = redir;
+                SendResponse(context, responseObject);
                 return;
             }
         }

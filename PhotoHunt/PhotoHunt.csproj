@@ -204,6 +204,7 @@
     <Compile Include="model\PhotohuntContext.cs" />
     <Compile Include="model\Theme.cs" />
     <Compile Include="model\User.cs" />
+    <Compile Include="model\UploadUrl.cs" />
     <Compile Include="model\Vote.cs" />
     <Compile Include="photo.aspx.cs">
       <DependentUpon>photo.aspx</DependentUpon>

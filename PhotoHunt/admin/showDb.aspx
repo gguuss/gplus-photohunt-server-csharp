@@ -66,7 +66,7 @@ can reset the database by passing the parameter ?clear=true.
     {
       %><h1>Edges</h1><%
       int count = 0;
-      foreach (var edge in edges)
+      foreach (PhotoHunt.model.DirectedUserToEdge edge in edges)
       {%>
         || <%=edge.friendUserId%> : <%=edge.photohuntUserId%> || <br /><%
         count++;
