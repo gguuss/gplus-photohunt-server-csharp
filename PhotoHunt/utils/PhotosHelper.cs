@@ -18,9 +18,10 @@ using Google.Apis.Authentication.OAuth2;
 using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
 using Google.Apis.Oauth2.v2;
 using Google.Apis.Oauth2.v2.Data;
-using Google.Apis.Util;
 using Google.Apis.Plus.v1;
 using Google.Apis.Plus.v1.Data;
+using Google.Apis.Services;
+using Google.Apis.Util;
 
 // For OAuth2
 using DotNetOpenAuth.Messaging;
@@ -196,7 +197,10 @@ namespace PhotoHunt.utils
                 {
                     NoCaching = true
                 };
-            ps = new PlusService(authenticator);
+            ps = new PlusService(new BaseClientService.Initializer()
+            {
+                Authenticator = authenticator
+            });
 
             Moment body = new Moment();
             ItemScope target = new ItemScope();
