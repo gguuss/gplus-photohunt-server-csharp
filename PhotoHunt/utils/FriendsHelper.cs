@@ -14,6 +14,8 @@ using Google.Apis.Oauth2.v2.Data;
 using Google.Apis.Util;
 using Google.Apis.Plus.v1;
 using Google.Apis.Plus.v1.Data;
+using Google.Apis.Services;
+
 
 // For OAuth2
 using DotNetOpenAuth.Messaging;
@@ -23,6 +25,7 @@ namespace PhotoHunt.utils
 {
     public class FriendsHelper: PlusHelper
     {
+        public FriendsHelper(HttpRequest req): base(req){ }
 
         /// <summary>
         /// Get a user's PhotoHunt friends.
@@ -54,12 +57,45 @@ namespace PhotoHunt.utils
 
         /// <summary>
         /// Creates friend edges within the model for each match between this user's visible people
+        /// and others who already exist in the database. This method is here for cases where the
+        /// method call is used asynchronously.
+        /// </summary>
+        /// <param name="user">The user object to create friend edges for.</param>
+        /// <param name="authState">Contains the IAuthorizationState object which is used to
+        /// authorize the client to generate the signed in user's visible people.</param>
+        /// <returns>None.</returns>
+        public void GenerateFriends(User user,IAuthorizationState authState)
+        {
+            // Set the authorization state in the base class for the authorization call.
+            _authState = authState;
+
+            var provider = new WebServerClient(GoogleAuthenticationServer.Description);
+            provider.ClientIdentifier = CLIENT_ID;
+            provider.ClientSecret = CLIENT_SECRET;
+            var authenticator =
+                new OAuth2Authenticator<WebServerClient>(
+                    provider,
+                    GetAuthorization)
+                {
+                    NoCaching = true
+                };
+
+            ps = new PlusService(new BaseClientService.Initializer()
+            {
+                Authenticator = authenticator
+            });
+
+            GenerateFriends(user, ps);
+        }
+
+        /// <summary>
+        /// Creates friend edges within the model for each match between this user's visible people
         /// and others who already exist in the database.
         /// </summary>
         /// <param name="user">The user object to create friend edges for.</param>
         /// <param name="ps">The Google+ API client service.</param>
         /// <returns>None.</returns>
-        static public void GenerateFriends(User user, PlusService ps)
+        public void GenerateFriends(User user, PlusService ps)
         {
             // Get the PeopleFeed for the currently authenticated user using the Google+ API.
             PeopleResource.ListRequest lr = ps.People.List("me",

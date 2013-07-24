@@ -20,6 +20,7 @@ using DotNetOpenAuth.OAuth2;
 
 // For entity framework constants.
 using System.Data;
+using System.Threading.Tasks;
 
 // For data members.
 using PhotoHunt.model;
@@ -28,6 +29,7 @@ namespace PhotoHunt.utils
 {
     public class ConnectHelper: PlusHelper
     {
+
         /// <summary>
         /// Verifies the token against the client ID.
         /// </summary>
@@ -68,7 +70,7 @@ namespace PhotoHunt.utils
         /// <returns>A User object that represents the created user.</returns>
         public User SaveTokenForUser(IAuthorizationState authState)
         {
-            // Set the auth state in a the superclass for the authorization call.
+            // Set the authorization state in the superclass for the authorization call.
             _authState = authState;
 
             var provider = new WebServerClient(GoogleAuthenticationServer.Description);
@@ -121,7 +123,15 @@ namespace PhotoHunt.utils
 
                 // Use the FriendsHelper to generate this user's list of friends
                 // who also use this app.
-                PhotoHunt.utils.FriendsHelper.GenerateFriends(user, ps);
+                FriendsHelper friendHelper =
+                    new FriendsHelper(HttpContext.Current.Request);
+
+                // Generate the friends list asynchronously within a task.
+                Action generateFriends = () => {
+                    friendHelper.GenerateFriends(user, _authState);
+                };
+                Task.Factory.StartNew(generateFriends);
+
             }
             else
             {

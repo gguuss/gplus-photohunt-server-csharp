@@ -4,6 +4,12 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
+// For async case where the HttpRequestInfo must be created outside of the 
+// original request context.
+using System.Collections.Specialized;
+using System.IO;
+using System.Net;
+
 // Libraries for Google APIs
 using Google.Apis.Authentication.OAuth2;
 using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
@@ -28,6 +34,15 @@ namespace PhotoHunt.utils
 {
     public class PlusHelper
     {
+        /// <summary>
+        /// The following variables are used for asynchronous cases where the HttpRequest
+        /// is used to cache the information needed to construct the Google+ API client.
+        /// </summary>
+        private string _httpReqMethod;
+        private Uri _reqUri;
+        private string _rawUrl;
+        private WebHeaderCollection _headers;
+        private Stream _inputStream;
 
         // Requires the trailing "/"
         public const string BASE_URL = "http://localhost:8080/";
@@ -49,6 +64,30 @@ namespace PhotoHunt.utils
 
         // Used to perform API calls against Google+.
         protected PlusService ps { get; set; }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public PlusHelper()
+        {
+        }
+
+        /// <summary>
+        /// Constructor that accepts a request object for reconstructing the request when 
+        /// asynchronous operations are performed outside of the current request.
+        /// </summary>
+        /// <param name="req">The HttpRequest object from the calling request that contains
+        /// headers, the request URI, and so on.</param>
+        public PlusHelper(HttpRequest req)
+        {
+            this._httpReqMethod = req.HttpMethod;
+            this._reqUri = req.Url;
+            this._rawUrl = req.RawUrl;
+            _headers = new WebHeaderCollection();
+            _headers.Add(req.Headers);
+            _inputStream = new MemoryStream();
+            req.InputStream.CopyTo(_inputStream);
+        }
 
         /// <summary>
         /// Generates the credentials needed for the library given the current user stored in
@@ -79,8 +118,18 @@ namespace PhotoHunt.utils
             // authorization.
             if (_authState != null)
             {
-                HttpRequestInfo reqinfo =
-                    new HttpRequestInfo(HttpContext.Current.Request);
+                HttpRequestInfo reqinfo = null;
+                if (_httpReqMethod != null && _reqUri != null && _rawUrl != null &&
+                    _headers != null && _inputStream != null)
+                {
+                    reqinfo = new HttpRequestInfo(_httpReqMethod, _reqUri, _rawUrl,
+                        (System.Net.WebHeaderCollection)_headers, _inputStream);
+                }
+
+                if (reqinfo == null)
+                {
+                    reqinfo = new HttpRequestInfo(HttpContext.Current.Request);
+                }
                 client.ProcessUserAuthorization(reqinfo);
             }
 
@@ -115,7 +164,7 @@ namespace PhotoHunt.utils
 
         /// <summary>
         /// The CreateState function will generate a state that can be
-        /// used to initialize the PlusWrapper.
+        /// used to initialize the IAuthorizationState.
         /// </summary>
         /// <param name="accessToken">An access token string from an
         /// OAuth2 flow.</param>
