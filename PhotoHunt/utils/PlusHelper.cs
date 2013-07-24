@@ -32,7 +32,7 @@ using PhotoHunt.model;
 
 namespace PhotoHunt.utils
 {
-    public class PlusHelper
+    public class PlusHelper: IDisposable
     {
         /// <summary>
         /// The following variables are used for asynchronous cases where the HttpRequest
@@ -43,6 +43,9 @@ namespace PhotoHunt.utils
         private string _rawUrl;
         private WebHeaderCollection _headers;
         private Stream _inputStream;
+
+        // Track whether Dispose has been called.
+        private bool disposed = false;
 
         // Requires the trailing "/"
         public const string BASE_URL = "http://localhost:8080/";
@@ -87,6 +90,28 @@ namespace PhotoHunt.utils
             _headers.Add(req.Headers);
             _inputStream = new MemoryStream();
             req.InputStream.CopyTo(_inputStream);
+        }
+
+        /// <summary>
+        /// Explicitly clean up any members that may be occupying memory.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Helper that releases resources that may be occupying memory.
+        /// </summary>
+        /// <param name="disposing">Indicates whether to dispose objects.</param>
+        private void Dispose(bool disposing)
+        {
+            if (!this.disposed && _inputStream != null && disposing)
+            {
+                _inputStream.Dispose();
+            }
+            disposed = true;
         }
 
         /// <summary>

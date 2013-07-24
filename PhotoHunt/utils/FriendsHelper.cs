@@ -95,7 +95,7 @@ namespace PhotoHunt.utils
         /// <param name="user">The user object to create friend edges for.</param>
         /// <param name="ps">The Google+ API client service.</param>
         /// <returns>None.</returns>
-        public void GenerateFriends(User user, PlusService ps)
+        static public void GenerateFriends(User user, PlusService ps)
         {
             // Get the PeopleFeed for the currently authenticated user using the Google+ API.
             PeopleResource.ListRequest lr = ps.People.List("me",
