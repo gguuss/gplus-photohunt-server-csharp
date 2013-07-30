@@ -49,7 +49,7 @@ namespace PhotoHunt.utils
 
             // Verify the first part of the token for authorization. On mobile clients,
             // the full string might differ, but the first part is consistent.
-            Regex matcher = new Regex("(\\d+)(.*).apps.googleusercontent.com$");
+            Regex matcher = new Regex("([\\d]{9,11})([-]?)(.*)$");
             if (matcher.Match(tokeninfo.Issued_to).Groups[1].Value !=
                 matcher.Match(CLIENT_ID).Groups[1].Value)
             {
