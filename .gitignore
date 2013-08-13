@@ -1,0 +1,16 @@
+# Ignore basic Visual Studio generated caches
+*.user
+*.suo
+
+# Ignore Visual Studio generated directories
+PhotoHunt/obj/
+PhotoHunt/[Bb]in
+PhotoHunt/[Dd]ebug*/
+PhotoHunt/[Rr]elease*/
+
+# Ignore NuGet content
+# packages/*
+
+# Ignore stored application data (EF)
+PhotoHunt/App_Data/*
+
